@@ -6,342 +6,100 @@
     <title>羽毛球计分</title>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
-        :root {
-            --primary: #1989fa;
-            --success: #07c160;
-            --danger: #ff4d4f;
-            --bg: #f5f5f5;
-            --white: #fff;
-            --text: #333;
-            --border: #e8e8e8;
-        }
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, sans-serif;
-            background: var(--bg);
-            max-width: 480px;
-            margin: 0 auto;
-        }
+        :root { --primary: #1989fa; --success: #07c160; --danger: #ff4d4f; --bg: #f5f5f5; --white: #fff; --text: #333; --border: #e8e8e8; }
+        body { font-family: -apple-system, BlinkMacSystemFont, sans-serif; background: var(--bg); max-width: 480px; margin: 0 auto; }
         .page { display: none; min-height: 100vh; padding-bottom: 80px; }
         .page.active { display: block; }
-        .header {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 12px 16px;
-            background: var(--white);
-            border-bottom: 1px solid var(--border);
-            position: sticky;
-            top: 0;
-        }
+        .header { display: flex; align-items: center; justify-content: space-between; padding: 12px 16px; background: var(--white); border-bottom: 1px solid var(--border); position: sticky; top: 0; }
         .header h1 { font-size: 17px; flex: 1; text-align: center; }
         .tips { text-align: center; padding: 12px; color: #999; font-size: 13px; }
         .match-list { background: var(--white); }
-        .match-item {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 16px;
-            border-bottom: 1px solid var(--border);
-        }
+        .match-item { display: flex; justify-content: space-between; align-items: center; padding: 16px; border-bottom: 1px solid var(--border); }
         .match-title { font-size: 16px; margin-bottom: 4px; }
         .match-date { font-size: 13px; color: #999; }
-        .match-status {
-            padding: 4px 8px;
-            border-radius: 4px;
-            font-size: 12px;
-            color: #999;
-            background: #f0f0f0;
-        }
+        .match-status { padding: 4px 8px; border-radius: 4px; font-size: 12px; color: #999; background: #f0f0f0; }
         .match-status.ongoing { color: var(--danger); background: #fff2f0; }
         .empty { text-align: center; padding: 80px 20px; color: #999; }
-        .section-title {
-            padding: 16px;
-            color: #999;
-            font-size: 13px;
-            background: var(--bg);
-        }
-        .form-item {
-            display: flex;
-            align-items: center;
-            padding: 12px 16px;
-            background: var(--white);
-            border-bottom: 1px solid var(--border);
-        }
+        .section-title { padding: 16px; color: #999; font-size: 13px; background: var(--bg); }
+        .form-item { display: flex; align-items: center; padding: 12px 16px; background: var(--white); border-bottom: 1px solid var(--border); }
         .form-item label { width: 80px; }
-        .form-item input {
-            flex: 1;
-            border: none;
-            text-align: right;
-            font-size: 15px;
-            outline: none;
-        }
-        .player-item {
-            display: flex;
-            align-items: center;
-            padding: 12px 16px;
-            background: var(--white);
-            border-bottom: 1px solid var(--border);
-        }
+        .form-item input { flex: 1; border: none; text-align: right; font-size: 15px; outline: none; }
+        .player-item { display: flex; align-items: center; padding: 12px 16px; background: var(--white); border-bottom: 1px solid var(--border); }
         .player-num { width: 70px; }
-        .gender {
-            padding: 2px 8px;
-            border-radius: 4px;
-            font-size: 12px;
-            margin-right: 8px;
-        }
+        .gender { padding: 2px 8px; border-radius: 4px; font-size: 12px; margin-right: 8px; }
         .gender.male { background: #e6f7ff; color: #1890ff; }
         .gender.female { background: #fff0f6; color: #eb2f96; }
         .player-input { flex: 1; border: none; outline: none; }
-        .btn-delete {
-            padding: 4px 12px;
-            background: var(--danger);
-            color: white;
-            border: none;
-            border-radius: 4px;
-            font-size: 13px;
-        }
-        .action-btns {
-            display: flex;
-            gap: 12px;
-            padding: 16px;
-            background: var(--white);
-        }
-        .btn-outline {
-            flex: 1;
-            padding: 10px;
-            background: var(--white);
-            border: 1px solid var(--primary);
-            border-radius: 4px;
-            color: var(--primary);
-            font-size: 14px;
-        }
-        .handicap-item {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 12px 16px;
-          background: var(--white);
-border-bottom: 1px solid var(--border);
-}
-.stepper { display: flex; align-items: center; gap: 12px; }
-.stepper button {
-width: 28px;
-height: 28px;
-border: 1px solid #ddd;
-background: #f5f5f5;
-border-radius: 4px;
-}
-.schedule-game {
-display: flex;
-align-items: center;
-justify-content: center;
-padding: 20px;
-gap: 20px;
-background: var(--white);
-border-bottom: 1px solid var(--border);
-}
-.schedule-game .tag {
-padding: 6px 16px;
-background: var(--primary);
-color: white;
-border-radius: 4px;
-margin: 4px 0;
-}
-.game-item {
-display: flex;
-align-items: center;
-justify-content: center;
-padding: 16px;
-gap: 16px;
-background: var(--white);
-border-bottom: 1px solid var(--border);
-}
-.tag-small {
-padding: 4px 12px;
-background: var(--primary);
-color: white;
-border-radius: 4px;
-font-size: 13px;
-}
-.score {
-font-size: 36px;
-min-width: 50px;
-text-align: center;
-}
-.score.winner {
-color: var(--primary);
-border: 2px solid var(--primary);
-border-radius: 8px;
-padding: 4px 12px;
-}
-.ranking-list {
-display: grid;
-grid-template-columns: 1fr 1fr;
-gap: 1px;
-background: var(--border);
-}
-.ranking-item {
-background: var(--white);
-padding: 16px;
-text-align: center;
-}
-.badge { padding: 2px 8px; border-radius: 4px; font-size: 12px; color: white; }
-.badge.win { background: var(--primary); }
-.badge.loss { background: var(--danger); }
-.bottom-btn {
-position: fixed;
-bottom: 0;
-left: 0;
-right: 0;
-padding: 12px 16px;
-background: var(--white);
-border-top: 1px solid var(--border);
-}
-.btn-primary {
-width: 100%;
-padding: 12px;
-background: var(--primary);
-color: white;
-border: none;
-border-radius: 4px;
-font-size: 16px;
-}
-.bottom-actions {
-position: fixed;
-bottom: 0;
-left: 0;
-right: 0;
-display: flex;
-gap: 12px;
-padding: 12px 16px;
-background: var(--white);
-border-top: 1px solid var(--border);
-}
-.btn-secondary {
-flex: 1;
-padding: 12px;
-background: var(--white);
-border: 1px solid var(--border);
-border-radius: 4px;
-}
-.tab-bar {
-position: fixed;
-bottom: 0;
-left: 0;
-right: 0;
-display: flex;
-background: var(--white);
-border-top: 1px solid var(--border);
-}
-.tab-item {
-flex: 1;
-display: flex;
-flex-direction: column;
-align-items: center;
-padding: 8px;
-color: #999;
-font-size: 12px;
-}
-.tab-item.active { color: var(--primary); }
-</style>
+        .btn-delete { padding: 4px 12px; background: var(--danger); color: white; border: none; border-radius: 4px; font-size: 13px; }
+        .action-btns { display: flex; gap: 12px; padding: 16px; background: var(--white); }
+        .btn-outline { flex: 1; padding: 10px; background: var(--white); border: 1px solid var(--primary); border-radius: 4px; color: var(--primary); font-size: 14px; }
+        .schedule-game { display: flex; align-items: center; justify-content: center; padding: 20px; gap: 20px; background: var(--white); border-bottom: 1px solid var(--border); }
+        .schedule-game .tag { padding: 6px 16px; background: var(--primary); color: white; border-radius: 4px; margin: 4px 0; }
+        .game-item { display: flex; align-items: center; justify-content: center; padding: 16px; gap: 16px; background: var(--white); border-bottom: 1px solid var(--border); }
+        .tag-small { padding: 4px 12px; background: var(--primary); color: white; border-radius: 4px; font-size: 13px; }
+        .score { font-size: 36px; min-width: 50px; text-align: center; }
+        .score.winner { color: var(--primary); border: 2px solid var(--primary); border-radius: 8px; padding: 4px 12px; }
+        .ranking-list { display: grid; grid-template-columns: 1fr 1fr; gap: 1px; background: var(--border); }
+        .ranking-item { background: var(--white); padding: 16px; text-align: center; }
+        .badge { padding: 2px 8px; border-radius: 4px; font-size: 12px; color: white; }
+        .badge.win { background: var(--primary); }
+       .badge.loss { background: var(--danger); }
+        .bottom-btn { position: fixed; bottom: 0; left: 0; right: 0; padding: 12px 16px; background: var(--white); border-top: 1px solid var(--border); }
+        .btn-primary { width: 100%; padding: 12px; background: var(--primary); color: white; border: none; border-radius: 4px; font-size: 16px; }
+        .bottom-actions { position: fixed; bottom: 0; left: 0; right: 0; display: flex; gap: 12px; padding: 12px 16px; background: var(--white); border-top: 1px solid var(--border); }
+        .btn-secondary { flex: 1; padding: 12px; background: var(--white); border: 1px solid var(--border); border-radius: 4px; }
+        .tab-bar { position: fixed; bottom: 0; left: 0; right: 0; display: flex; background: var(--white); border-top: 1px solid var(--border); }
+        .tab-item { flex: 1; display: flex; flex-direction: column; align-items: center; padding: 8px; color: #999; font-size: 12px; }
+        .tab-item.active { color: var(--primary); }
+    </style>
 </head>
 <body>
-
-<div id="page-list" class="page active">
-<div class="header">
-<div></div>
-<h1>比赛列表</h1>
-<div></div>
-</div>
-<div class="tips">长按比赛记录可删除</div>
-<div id="matchList" class="match-list"></div>
-<div id="empty" class="empty" style="display:none">
-<div style="font-size:48px;margin-bottom:16px">📋</div>
-<!-- 创建比赛 -->
-<div id="page-create" class="page">
-    <div class="header">
-        <div onclick="showPage('list')">←</div>
-        <h1>创建比赛</h1>
-        <div></div>
+    <div id="page-list" class="page active">
+        <div class="header"><div></div><h1>比赛列表</h1><div></div></div>
+        <div class="tips">长按比赛记录可删除</div>
+        <div id="matchList" class="match-list"></div>
+        <div id="empty" class="empty" style="display:none"><div style="font-size:48px;margin-bottom:16px">📋</div><div>暂无比赛</div></div>
     </div>
-    <div class="section-title">比赛信息</div>
-    <div class="form-item">
-        <label>标题</label>
-        <input type="text" id="matchTitle" placeholder="输入比赛标题">
+    <div id="page-create" class="page">
+        <div class="header"><div onclick="showPage('list')">←</div><h1>创建比赛</h1><div></div></div>
+        <div class="section-title">比赛信息</div>
+        <div class="form-item"><label>标题</label><input type="text" id="matchTitle" placeholder="输入比赛标题"></div>
+        <div class="form-item"><label>日期</label><input type="date" id="matchDate"></div>
+        <div class="section-title">参赛人员（4人）</div>
+        <div id="players"></div>
+        <div class="action-btns"><button class="btn-outline" onclick="importPlayers()">批量导入</button><button class="btn-outline" onclick="addPlayer()">添加选手</button></div>
+        <div style="height:80px"></div>
+        <div class="bottom-btn"><button class="btn-primary" onclick="createMatch()">生成比赛</button></div>
     </div>
-    <div class="form-item">
-        <label>日期</label>
-        <input type="date" id="matchDate">
+    <div id="page-schedule" class="page">
+        <div class="header"><div onclick="showPage('create')">←</div><h1>全赛程</h1><button onclick="showPage('create')" style="background:none;border:none;font-size:20px">✕</button></div>
+        <div id="schedule"></div>
+        <div class="bottom-actions"><button class="btn-secondary" onclick="reRoll()">↻ 重新随机</button><button class="btn-primary" onclick="startMatch()">开始比赛</button></div>
     </div>
-    <div class="section-title">参赛人员（4人）</div>
-    <div id="players"></div>
-    <div class="action-btns">
-        <button class="btn-outline" onclick="importPlayers()">批量导入</button>
-        <button class="btn-outline" onclick="addPlayer()">添加选手</button>
-    </div>
-    <div style="height:80px"></div>
-    <div class="bottom-btn">
-        <button class="btn-primary" onclick="createMatch()">生成比赛</button>
-    </div>
-</div>
-<!-- 全赛程 -->
-<div id="page-schedule" class="page">
-    <div class="header">
-        <div onclick="showPage('create')">←</div>
-        <h1>全赛程</h1>
-        <button onclick="showPage('create')" style="background:none;border:none;font-size:20px">✕</button>
-    </div>
-    <div id="schedule"></div>
-    <div class="bottom-actions">
-        <button class="btn-secondary" onclick="reRoll()">↻ 重新随机</button>
-        <button class="btn-primary" onclick="startMatch()">开始比赛</button>
-    </div>
-</div>
-<!-- 计分 -->
-<div id="page-score" class="page">
-    <div class="header">
-        <div onclick="showPage('list')">←</div>
-        <h1>计分</h1>
-        <div></div>
-    </div>
-    <div style="padding:16px;background:#fff;border-bottom:1px solid var(--border)">
-        <div style="display:flex;justify-content:space-between;margin-bottom:8px">
-            <div id="scoreTitle" style="font-size:18px;font-weight:500">--</div>
-            <div style="color:var(--danger)">进行中</div>
+    <div id="page-score" class="page">
+        <div class="header"><div onclick="showPage('list')">←</div><h1>计分</h1><div></div></div>
+        <div style="padding:16px;background:#fff;border-bottom:1px solid var(--border)">
+            <div style="display:flex;justify-content:space-between;margin-bottom:8px"><div id="scoreTitle" style="font-size:18px;font-weight:500">--</div><div style="color:var(--danger)">进行中</div></div>
+            <div id="scoreDate" style="color:#999;font-size:13px">--</div>
         </div>
-        <div id="scoreDate" style="color:#999;font-size:13px">--</div>
+        <div id="games"></div>
+        <div class="bottom-btn"><button class="btn-primary" onclick="endMatch()">结束比赛</button></div>
     </div>
-    <div id="games"></div>
-    <div class="bottom-btn">
-        <button class="btn-primary" onclick="endMatch()">结束比赛</button>
+    <div id="page-result" class="page">
+        <div class="header"><div onclick="showPage('list')">←</div><h1>比赛结果</h1><div></div></div>
+        <div style="padding:16px;background:#fff;border-bottom:1px solid var(--border)">
+            <div id="resultTitle" style="font-size:18px;font-weight:500;margin-bottom:8px">--</div>
+            <div id="resultDate" style="color:#999;font-size:13px">--</div>
+            <div style="color:#999;margin-top:4px">已结束</div>
+        </div>
+        <div class="section-title">胜场排行</div><div id="ranking" class="ranking-list"></div>
+        <div class="section-title">全赛程</div><div id="resultGames"></div>
     </div>
-</div>
-<!-- 结果 -->
-<div id="page-result" class="page">
-    <div class="header">
-        <div onclick="showPage('list')">←</div>
-        <h1>比赛结果</h1>
-        <div></div>
+    <div class="tab-bar" id="tabBar">
+00:56
+       <a class="tab-item active" onclick="showPage('list')"><span>📋</span><span>比赛列表</span></a>
+        <a class="tab-item" onclick="showCreate()"><span>➕</span><span>创建比赛</span></a>
     </div>
-    <div style="padding:16px;background:#fff;border-bottom:1px solid var(--border)">
-        <div id="resultTitle" style="font-size:18px;font-weight:500;margin-bottom:8px">--</div>
-        <div id="resultDate" style="color:#999;font-size:13px">--</div>
-        <div style="color:#999;margin-top:4px">已结束</div>
-    </div>
-    <div class="section-title">胜场排行</div>
-    <div id="ranking" class="ranking-list"></div>
-    <div class="section-title">全赛程</div>
-    <div id="resultGames"></div>
-</div>
-<!-- 底部导航 -->
-<div class="tab-bar" id="tabBar">
-    <a class="tab-item active" onclick="showPage('list')">
-        <span>📋</span>
-        <span>比赛列表</span>
-    </a>
-    <a class="tab-item" onclick="showCreate()">
-        <span>➕</span>
-        <span>创建比赛</span>
-    </a>
-</div>
-<script src="app.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>
